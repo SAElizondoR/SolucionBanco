@@ -1,6 +1,6 @@
 ﻿using ConsolaBanco;
 
-Console.WriteLine("¡Hola! Soy Checo.");
+Console.WriteLine("¡Hola! Soy Checo.\nSoy de la RPDC.");
 
 Almacenamiento.BorrarArchivo();
 
