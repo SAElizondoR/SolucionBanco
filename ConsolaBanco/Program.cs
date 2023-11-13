@@ -18,120 +18,104 @@ Console.WriteLine(ricardo.MostrarDatos());
 Cliente jona = new(3, "Jona", "jona@mail.ru", 1500, 'M');
 Almacenamiento.Agregar(jona);
 
-if (args.Length == 0)
-{
-    Console.WriteLine("Enviar correo.");
-    ServicioCorreoElectronico.EnviarCorreo();
-}
-else
-{
-    Console.WriteLine(
-        $"Primer argumento: {args[0]}\n"
-        // + $"Tercer argumento: {args[2]}\n"
-        + "Mostrar menú.");
-    MostrarMenu();
+if (args.Length == 0) {
+  Console.WriteLine("Enviar correo.");
+  ServicioCorreoElectronico.EnviarCorreo();
+} else {
+  Console.WriteLine($"Primer argumento: {args[0]}\n"
+                    // + $"Tercer argumento: {args[2]}\n"
+                    + "Mostrar menú.");
+  MostrarMenu();
 }
 
-void MostrarMenu()
-{
-    Console.Clear();
-    Console.WriteLine("Selecciona una opción:\n1 - Crear un usuario nuevo.\n" +
-                      "2 - Eliminar un usuario existente.\n3 - Salir.");
+void MostrarMenu() {
+  Console.Clear();
+  Console.WriteLine("Selecciona una opción:\n1 - Crear un usuario nuevo.\n" +
+                    "2 - Eliminar un usuario existente.\n3 - Salir.");
 
-    byte opcion = 0;
-    do
-    {
-        string? entrada = Console.ReadLine();
+  byte opcion = 0;
+  do {
+    string? entrada = Console.ReadLine();
 
-        if (!byte.TryParse(entrada, out opcion))
-            Console.WriteLine("Debes ingresar un número (1, 2 ó 3).");
-        else if (opcion < 1 || opcion > 3)
-            Console.WriteLine("Debes ingresar un número válido (1, 2 ó 3).");
-    } while (opcion < 1 || opcion > 3);
+    if (!byte.TryParse(entrada, out opcion))
+      Console.WriteLine("Debes ingresar un número (1, 2 ó 3).");
+    else if (opcion < 1 || opcion > 3)
+      Console.WriteLine("Debes ingresar un número válido (1, 2 ó 3).");
+  } while (opcion < 1 || opcion > 3);
 
-    switch (opcion)
-    {
-    case 1:
-        CrearUsuario();
-        break;
-    case 2:
-        BorrarUsuario();
-        break;
-    case 3:
-        Environment.Exit(0);
-        break;
-    }
+  switch (opcion) {
+  case 1:
+    CrearUsuario();
+    break;
+  case 2:
+    BorrarUsuario();
+    break;
+  case 3:
+    Environment.Exit(0);
+    break;
+  }
 
-    Thread.Sleep(2000);
+  Thread.Sleep(2000);
 
-    MostrarMenu();
+  MostrarMenu();
 }
 
-void CrearUsuario()
-{
-    Console.Clear();
+void CrearUsuario() {
+  Console.Clear();
 
-    int id = LeerEntero("Id");
+  int id = LeerEntero("Id");
 
-    string? nombre = Leer("Nombre");
-    string? correoElectronico = Leer("Correo electrónico");
+  string? nombre = Leer("Nombre");
+  string? correoElectronico = Leer("Correo electrónico");
 
-    if (!decimal.TryParse(Leer("Saldo"), out decimal saldo))
-        Console.WriteLine("Saldo inválido.");
+  if (!decimal.TryParse(Leer("Saldo"), out decimal saldo))
+    Console.WriteLine("Saldo inválido.");
 
-    char tipoUsuario = LeerCaracter(
-                           "Escribe 'c' si el usuario es cliente y 'e' si es empleado");
+  char tipoUsuario =
+      LeerCaracter("Escribe 'c' si el usuario es cliente y 'e' si es empleado");
 
-    Usuario usuarioNuevo;
+  Usuario usuarioNuevo;
 
-    if (tipoUsuario.Equals('c'))
-    {
-        char regimenFiscal = LeerCaracter("Regimen fiscal");
-        usuarioNuevo = new Cliente(id, nombre!, correoElectronico!,
-                                   saldo, regimenFiscal);
-    }
-    else
-    {
-        string? departamento = Leer("Departamento");
-        usuarioNuevo = new Empleado(id, nombre!, correoElectronico!,
-                                    saldo, departamento!);
-    }
+  if (tipoUsuario.Equals('c')) {
+    char regimenFiscal = LeerCaracter("Regimen fiscal");
+    usuarioNuevo =
+        new Cliente(id, nombre!, correoElectronico!, saldo, regimenFiscal);
+  } else {
+    string? departamento = Leer("Departamento");
+    usuarioNuevo =
+        new Empleado(id, nombre!, correoElectronico!, saldo, departamento!);
+  }
 
-    Almacenamiento.Agregar(usuarioNuevo);
+  Almacenamiento.Agregar(usuarioNuevo);
 }
 
-string? Leer(string mensaje)
-{
-    Console.Write($"{mensaje}: ");
-    return Console.ReadLine();
+string? Leer(string mensaje) {
+  Console.Write($"{mensaje}: ");
+  return Console.ReadLine();
 }
 
-char LeerCaracter(string mensaje)
-{
-    if (!char.TryParse(Leer(mensaje), out char caracter))
-        Console.WriteLine("Entrada inválida.");
+char LeerCaracter(string mensaje) {
+  if (!char.TryParse(Leer(mensaje), out char caracter))
+    Console.WriteLine("Entrada inválida.");
 
-    return caracter;
+  return caracter;
 }
 
-void BorrarUsuario()
-{
-    Console.Clear();
+void BorrarUsuario() {
+  Console.Clear();
 
-    int id = LeerEntero("Ingresa el id del usuario a eliminar");
+  int id = LeerEntero("Ingresa el id del usuario a eliminar");
 
-    string resultado = Almacenamiento.BorrarUsuario(id);
+  string resultado = Almacenamiento.BorrarUsuario(id);
 
-    if (resultado.Equals("Exito"))
-    {
-        Console.Write("Usuario eliminado.");
-    }
+  if (resultado.Equals("Exito")) {
+    Console.Write("Usuario eliminado.");
+  }
 }
 
-int LeerEntero(string mensaje)
-{
-    if (!int.TryParse(Leer(mensaje), out int caracter))
-        Console.WriteLine("Entrada inválida.");
+int LeerEntero(string mensaje) {
+  if (!int.TryParse(Leer(mensaje), out int caracter))
+    Console.WriteLine("Entrada inválida.");
 
-    return caracter;
+  return caracter;
 }
