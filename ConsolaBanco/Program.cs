@@ -36,8 +36,8 @@ void MostrarMenu()
 {
     Console.Clear();
     Console.WriteLine("Selecciona una opción:\n1 - Crear un usuario nuevo.\n" +
-        "2 - Eliminar un usuario existente.\n3 - Salir.");
-    
+                      "2 - Eliminar un usuario existente.\n3 - Salir.");
+
     byte opcion = 0;
     do
     {
@@ -51,15 +51,15 @@ void MostrarMenu()
 
     switch (opcion)
     {
-        case 1:
-            CrearUsuario();
-            break;
-        case 2:
-            BorrarUsuario();
-            break;
-        case 3:
-            Environment.Exit(0);
-            break;
+    case 1:
+        CrearUsuario();
+        break;
+    case 2:
+        BorrarUsuario();
+        break;
+    case 3:
+        Environment.Exit(0);
+        break;
     }
 
     Thread.Sleep(2000);
@@ -72,29 +72,29 @@ void CrearUsuario()
     Console.Clear();
 
     int id = LeerEntero("Id");
-    
+
     string? nombre = Leer("Nombre");
     string? correoElectronico = Leer("Correo electrónico");
 
     if (!decimal.TryParse(Leer("Saldo"), out decimal saldo))
         Console.WriteLine("Saldo inválido.");
-    
+
     char tipoUsuario = LeerCaracter(
-        "Escribe 'c' si el usuario es cliente y 'e' si es empleado");
-    
+                           "Escribe 'c' si el usuario es cliente y 'e' si es empleado");
+
     Usuario usuarioNuevo;
 
     if (tipoUsuario.Equals('c'))
     {
         char regimenFiscal = LeerCaracter("Regimen fiscal");
         usuarioNuevo = new Cliente(id, nombre!, correoElectronico!,
-            saldo, regimenFiscal);
+                                   saldo, regimenFiscal);
     }
     else
     {
         string? departamento = Leer("Departamento");
         usuarioNuevo = new Empleado(id, nombre!, correoElectronico!,
-            saldo, departamento!);
+                                    saldo, departamento!);
     }
 
     Almacenamiento.Agregar(usuarioNuevo);
@@ -110,7 +110,7 @@ char LeerCaracter(string mensaje)
 {
     if (!char.TryParse(Leer(mensaje), out char caracter))
         Console.WriteLine("Entrada inválida.");
-    
+
     return caracter;
 }
 
@@ -132,6 +132,6 @@ int LeerEntero(string mensaje)
 {
     if (!int.TryParse(Leer(mensaje), out int caracter))
         Console.WriteLine("Entrada inválida.");
-    
+
     return caracter;
 }
