@@ -1,20 +1,24 @@
-﻿using ConsolaBanco;
+﻿using System.Text.RegularExpressions;
+using ConsolaBanco;
 
 Console.WriteLine("¡Hola! Soy Checo.\nSoy de la RPDC.");
 
 Almacenamiento.BorrarArchivo();
 
+// Crear usuario 1
 Cliente sergio = new(1, "Sergio", "sergio@mail.ru", 4000, 'M');
 sergio.Depositar(-20);
 Console.WriteLine(
     sergio.MostrarDatos("La inforamción del usuario es la siguiente"));
 Almacenamiento.Agregar(sergio);
 
+// Crear usuario 2
 Empleado ricardo = new(2, "Ricardo", "ricardo@mail.ru", 4000, "TI");
 ricardo.Depositar(2000);
 Almacenamiento.Agregar(ricardo);
 Console.WriteLine(ricardo.MostrarDatos());
 
+// Crear usuario 3
 Cliente jona = new(3, "Jona", "jona@mail.ru", 1500, 'M');
 Almacenamiento.Agregar(jona);
 
@@ -63,16 +67,11 @@ void MostrarMenu() {
 void CrearUsuario() {
   Console.Clear();
 
-  int id = LeerEntero("Id");
-
+  int id = LeerId("Id", true);
   string? nombre = Leer("Nombre");
-  string? correoElectronico = Leer("Correo electrónico");
-
-  if (!decimal.TryParse(Leer("Saldo"), out decimal saldo))
-    Console.WriteLine("Saldo inválido.");
-
-  char tipoUsuario =
-      LeerCaracter("Escribe 'c' si el usuario es cliente y 'e' si es empleado");
+  string? correoElectronico = LeerCorreoElectronico();
+  decimal saldo = LeerSaldo();
+  char tipoUsuario = LeerTipoUsuario();
 
   Usuario usuarioNuevo;
 
@@ -89,22 +88,10 @@ void CrearUsuario() {
   Almacenamiento.Agregar(usuarioNuevo);
 }
 
-string? Leer(string mensaje) {
-  Console.Write($"{mensaje}: ");
-  return Console.ReadLine();
-}
-
-char LeerCaracter(string mensaje) {
-  if (!char.TryParse(Leer(mensaje), out char caracter))
-    Console.WriteLine("Entrada inválida.");
-
-  return caracter;
-}
-
 void BorrarUsuario() {
   Console.Clear();
 
-  int id = LeerEntero("Ingresa el id del usuario a eliminar");
+  int id = LeerId("Ingresa el id del usuario a eliminar", false);
 
   string resultado = Almacenamiento.BorrarUsuario(id);
 
@@ -113,9 +100,118 @@ void BorrarUsuario() {
   }
 }
 
-int LeerEntero(string mensaje) {
-  if (!int.TryParse(Leer(mensaje), out int caracter))
+
+string Leer(string mensaje)
+{
+  Console.Write($"{mensaje}: ");
+  return Console.ReadLine()!;
+}
+
+int LeerId(string mensaje, bool agregar)
+{
+  int id;
+  do
+  {
+    if (!int.TryParse(Leer(mensaje), out id))
+    {
+      Console.WriteLine("Entrada inválida.");
+      continue;
+    }
+    if (!EsPositivo(id))
+    {
+      Console.WriteLine("El id debe ser positivo.");
+      continue;
+    }
+    // Si estamos agregando y existe el registro
+    if (agregar && Almacenamiento.Existe(id)) 
+    {
+      Console.WriteLine("Ya existe un registro con el id ingresado.");
+      continue;
+    }
+    // Si estamos borrando y no existe el registro
+    if (!agregar && !Almacenamiento.Existe(id))
+    {
+      Console.WriteLine("No existe el registro con el id ingresado.");
+      continue;
+    }
+    break;
+  } while (true);
+  return id;
+}
+
+string LeerCorreoElectronico()
+{
+  string correoElectronico;
+  string patronCorreo = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+  do
+  {
+    correoElectronico = Leer("Correo electrónico");
+    if (!Regex.IsMatch(correoElectronico, patronCorreo))
+    {
+      Console.WriteLine("Correo electrónico inválido.");
+      continue;
+    }
+    break;
+  } while (true);
+
+  return correoElectronico;
+}
+
+decimal LeerSaldo()
+{
+  decimal saldo;
+  do
+  {
+    if (!decimal.TryParse(Leer("Saldo"), out saldo))
+    {
+      Console.WriteLine("Saldo inválido.");
+      continue;
+    }
+    if (!EsPositivo(saldo))
+    {
+      Console.WriteLine("Debe ser positivo.");
+      continue;
+    }
+    break;
+  } while (true);
+
+  return saldo;
+}
+
+char LeerCaracter(string mensaje) {
+  if (!char.TryParse(Leer(mensaje), out char valor))
     Console.WriteLine("Entrada inválida.");
 
-  return caracter;
+  return valor;
+}
+
+char LeerTipoUsuario()
+{
+  char tipoUsuario;
+  List<char> opcionesValidas = new() { 'c', 'e'};
+
+  do
+  {
+
+    if (!char.TryParse(
+      Leer("Escribe 'c' si el usuario es cliente y 'e' si es empleado"),
+      out tipoUsuario))
+    {
+      Console.WriteLine("Entrada inválida.");
+      continue;
+    }
+    if (!opcionesValidas.Contains(tipoUsuario))
+    {
+      Console.WriteLine("Valor inválido.");
+      continue;
+    }
+    break;
+  } while(true);
+
+  return tipoUsuario;
+}
+
+bool EsPositivo(decimal valor)
+{
+    return valor > 0;
 }

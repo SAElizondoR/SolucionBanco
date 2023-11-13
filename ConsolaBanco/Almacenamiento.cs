@@ -93,4 +93,10 @@ public static class Almacenamiento
 
         return JsonConvert.DeserializeObject<List<object>>(usuariosEnArchivo);
     }
+
+    public static bool Existe(int id)
+    {
+        var listaUsuarios = ObtenerUsuarios();
+        return listaUsuarios.Any(usuario => usuario.ObtenerId() == id);
+    }
 }
