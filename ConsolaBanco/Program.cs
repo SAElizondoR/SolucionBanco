@@ -1,5 +1,7 @@
 ﻿using ConsolaBanco;
 
+Console.WriteLine("¡Hola! Soy Checo.");
+
 Almacenamiento.BorrarArchivo();
 
 Cliente sergio = new(1, "Sergio", "sergio@mail.ru", 4000, 'M');
