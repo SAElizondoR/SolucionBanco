@@ -1,0 +1,26 @@
+[
+  {
+    "RegimenFiscal": "M",
+    "Id": 1,
+    "Nombre": "Sergio",
+    "CorreoE": "sergio@mail.ru",
+    "Saldo": 4161.6,
+    "FechaRegistro": "2023-11-12T23:40:24.7338382-06:00"
+  },
+  {
+    "Departamento": "TI",
+    "Id": 2,
+    "Nombre": "Ricardo",
+    "CorreoE": "ricardo@mail.ru",
+    "Saldo": 6300.0,
+    "FechaRegistro": "2023-11-12T23:40:24.8746369-06:00"
+  },
+  {
+    "RegimenFiscal": "M",
+    "Id": 3,
+    "Nombre": "Jona",
+    "CorreoE": "jona@mail.ru",
+    "Saldo": 1530.00,
+    "FechaRegistro": "2023-11-12T23:40:24.9010938-06:00"
+  }
+]
